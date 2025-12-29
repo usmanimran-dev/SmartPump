@@ -1,0 +1,53 @@
+<header class="sticky top-4 z-50 mx-4 px-6 py-4 dashboard-card flex items-center justify-between !rounded-2xl">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+      <span class="text-white font-bold text-xl">S</span>
+    </div>
+    <h2 class="text-xl font-bold tracking-tight text-gradient">SmartPump</h2>
+  </div>
+
+  <nav class="hidden md:flex items-center gap-1">
+    <a routerLink="/dashboard" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
+      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
+      Dashboard
+    </a>
+    <a routerLink="/fuel-entry" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
+      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
+      Fuel Entry
+    </a>
+    <a *ngIf="['owner', 'manager'].includes(userRole())" routerLink="/alerts"
+      routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
+      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
+      Alerts
+    </a>
+    <a *ngIf="userRole() === 'owner'" routerLink="/reports" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
+      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
+      Reports
+    </a>
+    <a *ngIf="userRole() === 'owner'" routerLink="/admin" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
+      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
+      Admin
+    </a>
+  </nav>
+
+  <div class="flex items-center gap-4" *ngIf="user()">
+    <div class="hidden sm:flex items-center gap-3 pr-4 border-r border-white/5">
+      <div
+        class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold border-2 border-white/10 uppercase">
+        {{ userInitial() }}
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-bold text-slate-100 leading-none truncate max-w-[120px]">{{ user()?.email }}</span>
+        <span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold mt-1">{{ roleLabel() }}</span>
+      </div>
+    </div>
+    <button (click)="logout()"
+      class="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
+      title="Secure Logout">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+    </button>
+  </div>
+</header>

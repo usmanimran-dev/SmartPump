@@ -1,0 +1,70 @@
+<div class="min-h-screen flex items-center justify-center p-6 bg-[#030712] relative overflow-hidden">
+  <!-- Dynamic Background Ambient -->
+  <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[128px] animate-pulse"></div>
+  <div
+    class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[128px] animate-pulse delay-1000">
+  </div>
+
+  <div class="w-full max-w-md page-fade-in">
+    <div class="dashboard-card !p-8 text-center backdrop-blur-2xl">
+      <div class="flex flex-col items-center mb-10">
+        <div
+          class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/40 mb-4 transform -rotate-6">
+          <span class="text-white font-bold text-3xl">P</span>
+        </div>
+        <h1 class="text-4xl font-black tracking-tighter text-gradient mb-2 italic">SmartPump</h1>
+        <p class="text-slate-500 font-medium">Enterprise Fuel Management</p>
+      </div>
+
+      <form (submit)="login()" class="space-y-6 text-left">
+        <div *ngIf="errorMessage()"
+          class="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium text-center">
+          {{ errorMessage() }}
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-1">Email / ID</label>
+          <input type="email" name="email" [(ngModel)]="email" placeholder="admin@smartpump.com" class="input-field"
+            required />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-1">Access Key</label>
+          <input type="password" name="password" [(ngModel)]="password" placeholder="••••••••" class="input-field"
+            required />
+        </div>
+
+        <button type="submit" [disabled]="isSubmitting()"
+          class="btn-primary w-full text-lg uppercase tracking-widest mt-4 disabled:opacity-50">
+          {{ isSubmitting() ? 'Establishing Link...' : 'Establish Link' }}
+        </button>
+
+        <div class="flex items-center gap-4 my-6">
+          <div class="h-px flex-1 bg-white/10"></div>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-slate-600 font-bold">Secure Gateway</span>
+          <div class="h-px flex-1 bg-white/10"></div>
+        </div>
+
+        <button type="button" (click)="googleLogin()"
+          class="w-full py-3 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all active:scale-[0.98]">
+          <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <path fill="#EA4335"
+              d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.273 0 3.191 2.691 1.245 6.655l4.021 3.11z" />
+            <path fill="#34A853"
+              d="M16.039 18.415c-1.157.653-2.516 1.026-4.039 1.026a7.08 7.08 0 0 1-6.734-4.856l-4.022 3.11C3.191 21.655 7.273 24.345 12 24.345c2.997 0 5.733-1.009 7.821-2.718l-3.782-3.212z" />
+            <path fill="#4285F4"
+              d="M19.821 21.627c2.476-2.028 4.091-5.467 4.091-9.627 0-.745-.067-1.467-.194-2.164H12v4.455h6.612a5.66 5.66 0 0 1-2.455 3.71l3.664 3.626z" />
+            <path fill="#FBBC05"
+              d="M5.266 9.765 1.245 6.655A12 12 0 0 0 0 12c0 1.954.464 3.791 1.282 5.418l4.004-3.109A7.087 7.087 0 0 1 5.266 9.765z" />
+          </svg>
+          <span class="text-xs font-bold text-slate-300 uppercase tracking-widest">Authorize with Google</span>
+        </button>
+      </form>
+
+      <div class="mt-8 pt-6 border-t border-white/5">
+        <p class="text-slate-600 text-xs">Systems Status: <span
+            class="text-emerald-500 font-bold uppercase">Operational</span></p>
+      </div>
+    </div>
+  </div>
+</div>

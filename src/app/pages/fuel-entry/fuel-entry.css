@@ -1,0 +1,71 @@
+.page-container {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 800px;
+}
+
+h2 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .w-100 {
+    width: auto;
+    min-width: 200px;
+  }
+}
+
+/* Handled by Tailwind */
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #125aa0;
+}
+
+.message {
+  text-align: center;
+  margin-top: 10px;
+  color: green;
+}

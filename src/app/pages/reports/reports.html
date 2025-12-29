@@ -1,0 +1,67 @@
+<div class="p-6 max-w-7xl mx-auto space-y-6 page-fade-in">
+  <div>
+    <h2 class="text-3xl font-black text-slate-100 tracking-tight">System Analysis</h2>
+    <p class="text-slate-500 font-medium">Performance & Variance Tracking</p>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid gap-4 md:grid-cols-2">
+    <div class="dashboard-card border-l-4 border-l-indigo-500">
+      <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Total Dispensed</p>
+      <h3 class="text-3xl font-bold text-slate-100 font-mono-numbers">{{ totalSold() | number:'1.2-2' }} L</h3>
+    </div>
+
+    <div class="dashboard-card border-l-4 border-l-rose-500">
+      <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Total Variance</p>
+      <h3 class="text-3xl font-bold text-rose-400 font-mono-numbers">{{ totalVariance() | number:'1.2-2' }} L</h3>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="dashboard-card relative h-[400px]" *ngIf="reportsSignal().length > 0">
+    <canvas #fuelChart></canvas>
+  </div>
+
+  <!-- Data Table -->
+  <div class="dashboard-card overflow-hidden p-0" *ngIf="reportsSignal().length > 0">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-slate-300">
+        <thead class="text-xs text-slate-400 uppercase bg-slate-900/50">
+          <tr>
+            <th class="px-6 py-3">Date</th>
+            <th class="px-6 py-3">Station</th>
+            <th class="px-6 py-3">Opening</th>
+            <th class="px-6 py-3">Closing</th>
+            <th class="px-6 py-3">Sold</th>
+            <th class="px-6 py-3">Variance</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/50 text-slate-300">
+          <tr *ngFor="let report of reportsSignal()" class="hover:bg-slate-700/20 transition-colors">
+            <td class="px-6 py-4 font-mono-numbers">{{ report.date }}</td>
+            <td class="px-6 py-4">{{ report.stationId }}</td>
+            <td class="px-6 py-4 font-mono-numbers text-slate-400">{{ report.openingStock }}</td>
+            <td class="px-6 py-4 font-mono-numbers text-slate-400">{{ report.closingStock }}</td>
+            <td class="px-6 py-4 font-mono-numbers font-medium text-indigo-400">{{ report.soldLitres }}</td>
+            <td class="px-6 py-4 font-mono-numbers" [ngClass]="getLossClass(report.variance || 0)">
+              {{ report.variance | number:'1.2-2' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="reportsSignal().length === 0" class="dashboard-card text-center py-20">
+    <div
+      class="w-16 h-16 bg-slate-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-500" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    </div>
+    <h3 class="text-xl font-bold text-slate-200">No Analysis Available</h3>
+    <p class="text-slate-500">Record your first fuel entry to see data trends.</p>
+  </div>
+</div>
