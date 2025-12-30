@@ -11,15 +11,15 @@ import { of, Observable } from 'rxjs';
   selector: 'app-shift-manager',
   standalone: true,
   template: `
-    <div class="space-y-8 page-fade-in">
-      <div class="flex justify-between items-center">
+    <div class="space-y-6 page-fade-in pt-4">
+      <div class="flex justify-between items-center mb-6">
         <div>
-          <h2 class="text-3xl font-black text-white tracking-tight">Shift Configuration</h2>
-          <p class="text-slate-500 font-medium">Create and assign operation windows</p>
+          <h2 class="text-2xl font-bold text-[var(--sp-text-main)]">Shift Configuration</h2>
+          <p class="text-[var(--sp-text-muted)] text-sm font-medium">Create and assign operation windows</p>
         </div>
         
-        <div class="flex gap-4">
-          <select [(ngModel)]="selectedStationId" class="input-field max-w-[200px]">
+        <div class="flex gap-3">
+          <select [(ngModel)]="selectedStationId" class="input-field !py-1.5 !px-3 text-sm">
             <option value="">All Stations</option>
             <option *ngFor="let s of stations()" [value]="s.id">{{ s.name }}</option>
           </select>
@@ -30,55 +30,60 @@ import { of, Observable } from 'rxjs';
       </div>
 
       <!-- Shift Form -->
-      <div *ngIf="showForm()" class="dashboard-card max-w-xl mx-auto border-indigo-500/20 shadow-2xl">
-        <h3 class="text-xl font-bold text-white mb-6">Create Operating Shift</h3>
+      <div *ngIf="showForm()" class="dashboard-card max-w-xl mx-auto shadow-lg mb-8">
+        <h3 class="text-lg font-bold text-[var(--sp-text-main)] mb-6">Create Operating Shift</h3>
         <form [formGroup]="shiftForm" (ngSubmit)="createShift()" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-slate-400 mb-1">Station</label>
-            <select formControlName="stationId" class="input-field">
+            <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Primary Station</label>
+            <select formControlName="stationId" class="input-field w-full">
               <option value="" disabled>Select Station...</option>
               <option *ngFor="let s of stations()" [value]="s.id">{{ s.name }}</option>
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-400 mb-1">Shift Name (e.g. Morning SA-1)</label>
-            <input type="text" formControlName="id" class="input-field" />
+            <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Shift Designation</label>
+            <input type="text" formControlName="id" placeholder="e.g. Morning SA-1" class="input-field w-full" />
           </div>
           <div>
-             <label class="block text-sm font-medium text-slate-400 mb-1">Assigned Staff</label>
-             <select formControlName="staffId" class="input-field">
+             <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Assigned Personnel</label>
+             <select formControlName="staffId" class="input-field w-full">
                <option value="" disabled>Select Staff...</option>
                <option *ngFor="let u of users()" [value]="u.uid">{{ u.name }} ({{ u.role }})</option>
              </select>
           </div>
-          <button type="submit" [disabled]="shiftForm.invalid" class="btn-primary w-full">
-            Save Shift Template
+          <button type="submit" [disabled]="shiftForm.invalid" class="btn-primary w-full mt-4">
+            Initialize Shift Template
           </button>
         </form>
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
-        <div *ngFor="let shift of shifts()" class="dashboard-card border-l-4" 
-             [ngClass]="shift.isActive ? 'border-indigo-500' : 'border-slate-500 opacity-60'">
+        <div *ngFor="let shift of shifts()" class="dashboard-card border-l-4 group" 
+             [ngClass]="shift.isActive ? 'border-l-[var(--sp-primary)]' : 'border-l-[var(--sp-text-muted)]/20 opacity-60'">
           <div class="flex justify-between items-start">
-            <div>
-              <h4 class="text-lg font-bold text-white">{{ shift.id }}</h4>
-              <p class="text-xs text-slate-500 tracking-wider font-black uppercase">{{ shift.stationId }}</p>
+            <div class="space-y-1">
+              <h4 class="text-lg font-bold text-[var(--sp-text-main)]">{{ shift.id }}</h4>
+              <div class="flex items-center gap-2">
+                 <span class="text-[10px] font-bold text-[var(--sp-text-muted)] uppercase tracking-widest">{{ shift.stationId }}</span>
+                 <span class="badge" [ngClass]="shift.isActive ? 'bg-green-50 text-[var(--sp-success)]' : 'bg-gray-50 text-[var(--sp-text-muted)]'">
+                    {{ shift.isActive ? 'OPERATIONAL' : 'STANDBY' }}
+                 </span>
+              </div>
             </div>
             <div class="text-right">
-              <p class="text-[10px] text-slate-500 uppercase font-black">Staff ID</p>
-              <p class="text-sm font-bold text-indigo-400 mb-2">{{ shift.staffId }}</p>
+              <div class="text-[10px] font-bold text-[var(--sp-text-muted)] uppercase mb-1">Assigned Field Staff</div>
+              <div class="text-sm font-bold text-[var(--sp-primary)] mb-4">{{ shift.staffId }}</div>
               <button (click)="toggleShift(shift)" 
-                      [class]="shift.isActive ? 'text-rose-400' : 'text-emerald-400'"
-                      class="text-[10px] font-black uppercase tracking-widest hover:underline">
-                {{ shift.isActive ? 'Deactivate' : 'Activate' }}
+                      [class]="shift.isActive ? 'text-[var(--sp-error)]' : 'text-[var(--sp-success)]'"
+                      class="text-[11px] font-bold uppercase tracking-wider hover:underline transition-all">
+                {{ shift.isActive ? 'Force Shutdown' : 'Activate Window' }}
               </button>
             </div>
           </div>
         </div>
         
-        <div *ngIf="shifts().length === 0" class="col-span-full py-12 text-center text-slate-500">
-           No shifts defined for this station.
+        <div *ngIf="shifts().length === 0" class="col-span-full py-16 text-center text-[var(--sp-text-muted)] italic font-medium bg-white rounded-xl border border-dashed border-[var(--sp-border)]">
+           No operational shifts defined for the selected station.
         </div>
       </div>
     </div>

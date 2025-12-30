@@ -1,53 +1,127 @@
-<header class="sticky top-4 z-50 mx-4 px-6 py-4 dashboard-card flex items-center justify-between !rounded-2xl">
-  <div class="flex items-center gap-2">
-    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
-      <span class="text-white font-bold text-xl">S</span>
-    </div>
-    <h2 class="text-xl font-bold tracking-tight text-gradient">SmartPump</h2>
+<!-- Professional Sidebar -->
+<aside
+  class="fixed left-0 top-0 h-full w-20 flex flex-col items-center py-10 bg-white border-r border-[var(--sp-border)] z-[60] shadow-sm transform transition-all duration-300">
+  <div
+    class="w-14 h-14 bg-[var(--sp-primary)] rounded-2xl flex items-center justify-center shadow-lg mb-12 transform hover:rotate-6 transition-transform cursor-pointer">
+    <span class="text-white font-black text-3xl">S</span>
   </div>
 
-  <nav class="hidden md:flex items-center gap-1">
-    <a routerLink="/dashboard" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
-      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
-      Dashboard
+  <nav class="flex flex-col gap-8 flex-1">
+    <a routerLink="/company-portal" routerLinkActive="!text-white bg-[var(--sp-primary)] shadow-md"
+      class="p-3.5 rounded-xl text-[var(--sp-text-muted)] hover:text-[var(--sp-primary)] hover:bg-[var(--sp-light-blue)] transition-all group relative"
+      title="Dashboard">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+          d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+          d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+      </svg>
+      <span
+        class="absolute left-full ml-4 px-2.5 py-1.5 bg-[var(--sp-text-main)] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Enterprise
+        Portal</span>
     </a>
-    <a routerLink="/fuel-entry" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
-      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
-      Fuel Entry
+
+    <a routerLink="/admin/pumps" routerLinkActive="!text-white bg-[var(--sp-primary)] shadow-md"
+      class="p-3.5 rounded-xl text-[var(--sp-text-muted)] hover:text-[var(--sp-primary)] hover:bg-[var(--sp-light-blue)] transition-all group relative"
+      title="Pumps">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      <span
+        class="absolute left-full ml-4 px-2.5 py-1.5 bg-[var(--sp-text-main)] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Asset
+        Manager</span>
     </a>
-    <a *ngIf="['owner', 'manager'].includes(userRole())" routerLink="/alerts"
-      routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
-      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
-      Alerts
+
+    <a routerLink="/alerts" routerLinkActive="!text-white bg-[var(--sp-error)] shadow-md"
+      class="p-3.5 rounded-xl text-[var(--sp-text-muted)] hover:text-[var(--sp-error)] hover:bg-red-50 transition-all group relative"
+      title="Alerts">
+      <div class="relative">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span
+          class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[var(--sp-error)] rounded-full border-2 border-white animate-pulse"></span>
+      </div>
+      <span
+        class="absolute left-full ml-4 px-2.5 py-1.5 bg-[var(--sp-text-main)] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Security
+        Alerts</span>
     </a>
-    <a *ngIf="userRole() === 'owner'" routerLink="/reports" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
-      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
-      Reports
-    </a>
-    <a *ngIf="userRole() === 'owner'" routerLink="/admin" routerLinkActive="!bg-indigo-500/10 !text-indigo-400"
-      class="px-4 py-2 rounded-xl text-slate-400 font-medium hover:text-slate-100 hover:bg-white/5 transition-all">
-      Admin
+
+    <a routerLink="/reports" routerLinkActive="!text-white bg-[var(--sp-primary)] shadow-md"
+      class="p-3.5 rounded-xl text-[var(--sp-text-muted)] hover:text-[var(--sp-primary)] hover:bg-[var(--sp-light-blue)] transition-all group relative"
+      title="Reports">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+          d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <span
+        class="absolute left-full ml-4 px-2.5 py-1.5 bg-[var(--sp-text-main)] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Data
+        Analytics</span>
     </a>
   </nav>
 
-  <div class="flex items-center gap-4" *ngIf="user()">
-    <div class="hidden sm:flex items-center gap-3 pr-4 border-r border-white/5">
+  <button (click)="logout()"
+    class="p-5 text-[var(--sp-text-muted)] hover:text-[var(--sp-error)] transition-colors transform hover:rotate-12">
+    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    </svg>
+  </button>
+</aside>
+
+<!-- Professional Top Bar -->
+<header
+  class="fixed top-0 left-20 right-0 h-20 px-10 flex items-center justify-between bg-white/80 backdrop-blur-md border-b border-[var(--sp-border)] z-50 shadow-sm">
+  <!-- Price Ticker -->
+  <div class="flex items-center gap-10 overflow-hidden max-w-2xl">
+    <div class="flex items-center gap-3 whitespace-nowrap">
+      <div class="w-1.5 h-1.5 rounded-full bg-[var(--sp-primary)]"></div>
+      <span class="text-[11px] font-black uppercase text-[var(--sp-text-muted)] tracking-widest">Petrol</span>
+      <span class="font-bold text-[var(--sp-text-main)] text-sm tracking-tight">$1.24 <span
+          class="text-[10px] text-[var(--sp-text-muted)]">/L</span></span>
+    </div>
+    <div class="flex items-center gap-3 whitespace-nowrap border-l border-[var(--sp-bg)] pl-10">
+      <div class="w-1.5 h-1.5 rounded-full bg-[var(--sp-primary)]"></div>
+      <span class="text-[11px] font-black uppercase text-[var(--sp-text-muted)] tracking-widest">Diesel</span>
+      <span class="font-bold text-[var(--sp-text-main)] text-sm tracking-tight">$1.45 <span
+          class="text-[10px] text-[var(--sp-text-muted)]">/L</span></span>
+    </div>
+    <div class="flex items-center gap-3 whitespace-nowrap border-l border-[var(--sp-bg)] pl-10">
+      <div class="w-1.5 h-1.5 rounded-full bg-[var(--sp-primary)]"></div>
+      <span class="text-[11px] font-black uppercase text-[var(--sp-text-muted)] tracking-widest">LPG</span>
+      <span class="font-bold text-[var(--sp-text-main)] text-sm tracking-tight">$0.98 <span
+          class="text-[10px] text-[var(--sp-text-muted)]">/L</span></span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-8">
+    <!-- Emergency Stop -->
+    <button
+      class="bg-[var(--sp-error)] text-white hover:bg-red-700 h-11 px-6 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-red-500/20 transform active:scale-95 transition-all flex items-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <span>Emergency Stop</span>
+    </button>
+
+    <!-- Profile -->
+    <div class="flex items-center gap-5 pl-8 border-l border-[var(--sp-bg)]">
+      <div class="flex flex-col text-right">
+        <span class="text-sm font-black text-[var(--sp-text-main)] leading-tight uppercase tracking-tight">
+          {{ user()?.email ? user()?.email?.split('@')?.[0] : 'Operator' }}
+        </span>
+        <span class="text-[10px] font-bold text-[var(--sp-text-muted)] uppercase tracking-widest mt-0.5">{{ roleLabel()
+          }}</span>
+      </div>
       <div
-        class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold border-2 border-white/10 uppercase">
+        class="w-11 h-11 rounded-xl bg-[var(--sp-light-blue)] text-[var(--sp-primary)] border-2 border-[var(--sp-primary)]/20 flex items-center justify-center font-black text-xl shadow-inner group cursor-pointer hover:bg-[var(--sp-primary)] hover:text-white transition-all">
         {{ userInitial() }}
       </div>
-      <div class="flex flex-col">
-        <span class="text-sm font-bold text-slate-100 leading-none truncate max-w-[120px]">{{ user()?.email }}</span>
-        <span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold mt-1">{{ roleLabel() }}</span>
-      </div>
     </div>
-    <button (click)="logout()"
-      class="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
-      title="Secure Logout">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-      </svg>
-    </button>
   </div>
 </header>
+
+<!-- Spacer -->
+<div class="h-20 w-full"></div>

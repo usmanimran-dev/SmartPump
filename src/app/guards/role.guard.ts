@@ -14,7 +14,11 @@ export const roleGuard = (allowedRoles: UserRole[]): CanActivateFn => {
             filter(initialized => initialized), // Wait until sync is done
             take(1),
             map(() => {
-                const role = authService.userRole();
+                const role = authService.userRole() as UserRole;
+
+                // Super Admin bypass
+                if (role === 'super-admin') return true;
+
                 if (allowedRoles.includes(role)) {
                     return true;
                 } else {

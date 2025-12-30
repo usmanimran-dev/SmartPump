@@ -1,2 +1,9 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
+<div class="min-h-screen bg-[var(--sp-bg)]">
+    <!-- Sidebar & Top Bar Container -->
+    <app-header *ngIf="isAuthenticated()"></app-header>
+
+    <!-- Main Content Area -->
+    <main [class.pl-20]="isAuthenticated()" class="relative">
+        <router-outlet></router-outlet>
+    </main>
+</div>

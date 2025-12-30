@@ -1,0 +1,133 @@
+<div class="p-8 space-y-10 page-fade-in max-w-7xl mx-auto">
+    <!-- Header Section -->
+    <div class="flex justify-between items-start border-b border-[var(--sp-border)] pb-8">
+        <div>
+            <h1 class="text-4xl font-extrabold text-[var(--sp-text-main)] tracking-tight">Enterprise Hub</h1>
+            <p class="text-[var(--sp-text-muted)] text-md font-medium mt-1">Strategic Asset & Fuel Station Management
+                Monitoring</p>
+        </div>
+        <div class="hidden md:flex gap-4">
+            <div
+                class="bg-white px-5 py-3 rounded-xl border border-[var(--sp-border)] shadow-sm flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-[var(--sp-success)] animate-pulse"></div>
+                <div>
+                    <span
+                        class="text-[10px] font-bold text-[var(--sp-text-muted)] uppercase block tracking-widest">Network
+                        Status</span>
+                    <span class="text-sm font-bold text-[var(--sp-success)]">Operations Online</span>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-3 rounded-xl border border-[var(--sp-border)] shadow-sm">
+                <span
+                    class="text-[10px] font-bold text-[var(--sp-text-muted)] uppercase block tracking-widest mb-0.5">Active
+                    Entity</span>
+                <span class="text-sm font-bold text-[var(--sp-primary)]">{{ userProfile()?.orgId || 'FuelSync Global'
+                    }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stations Section -->
+    <section class="space-y-6">
+        <div class="flex items-center gap-4">
+            <div class="bg-[var(--sp-primary)] w-1.5 h-6 rounded-full"></div>
+            <h2 class="text-2xl font-bold text-[var(--sp-text-main)]">Strategic Locations</h2>
+            <div class="h-px flex-1 bg-[var(--sp-bg)]"></div>
+        </div>
+
+        <div *ngIf="!stations().length" class="bg-white border border-dashed rounded-2xl p-24 text-center shadow-sm">
+            <div
+                class="w-16 h-16 bg-[var(--sp-bg)] rounded-full flex items-center justify-center mx-auto mb-4 text-[var(--sp-text-muted)]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
+            <p class="text-[var(--sp-text-muted)] font-bold text-lg">No Stations Registered</p>
+            <p class="text-[var(--sp-text-muted)] text-sm mt-1">The system is awaiting station deployment for this
+                organization.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div *ngFor="let station of stations()"
+                class="dashboard-card !p-0 overflow-hidden flex flex-col hover:border-[var(--sp-primary)] group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300"
+                (click)="station.id && selectedStationId.set(station.id)"
+                [class.ring-2]="selectedStationId() === station.id"
+                [class.ring-[var(--sp-primary)]]="selectedStationId() === station.id">
+
+                <div class="p-6 flex-1">
+                    <div class="flex justify-between items-start mb-8">
+                        <div
+                            class="w-14 h-14 bg-[var(--sp-light-blue)] rounded-xl flex items-center justify-center text-[var(--sp-primary)] group-hover:bg-[var(--sp-primary)] group-hover:text-white transition-all transform group-hover:scale-105 duration-300 shadow-sm">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <span class="badge shadow-sm"
+                            [ngClass]="station.isActive ? 'bg-green-50 text-[var(--sp-success)] border-[var(--sp-success)]/30' : 'bg-gray-50 text-[var(--sp-text-muted)] border-gray-200'">
+                            {{ station.isActive ? 'LIVE STATION' : 'OFFLINE' }}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <h3
+                            class="text-xl font-bold text-[var(--sp-text-main)] group-hover:text-[var(--sp-primary)] transition-colors">
+                            {{ station.name }}</h3>
+                        <p
+                            class="text-sm font-bold text-[var(--sp-text-muted)] flex items-center gap-2 uppercase tracking-tight">
+                            <svg class="w-4 h-4 text-[var(--sp-primary)]" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {{ station.city }}
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    class="px-6 py-4 bg-[var(--sp-bg)] border-t border-[var(--sp-border)] group-hover:bg-[var(--sp-light-blue)] transition-colors flex justify-between items-center">
+                    <span class="text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider">Inspect
+                        Hardware</span>
+                    <span class="text-[var(--sp-primary)] font-black">→</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pumps Section (Shown when station selected) -->
+    <section *ngIf="selectedStationId()" class="space-y-4 pt-4 border-t border-[var(--sp-border)]">
+        <div class="flex justify-between items-center">
+            <h2 class="text-xl font-bold text-[var(--sp-text-main)]">Active Dispatch Terminals</h2>
+            <button class="text-sm font-bold text-[var(--sp-primary)] hover:underline"
+                (click)="selectedStationId.set(null)">Close List</button>
+        </div>
+
+        <div *ngIf="!pumps().length" class="text-center py-10 text-[var(--sp-text-muted)] italic">
+            No terminals configured for this station.
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div *ngFor="let pump of pumps()" class="dashboard-card group hover:shadow-md transition-all border-l-4"
+                [ngClass]="pump.status === 'active' ? 'border-l-[var(--sp-success)]' : 'border-l-[var(--sp-error)]'">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold text-[var(--sp-text-main)] mb-0.5">{{ pump.name || 'Generic Pump' }}</h4>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--sp-text-muted)]">{{
+                            pump.status }}</span>
+                    </div>
+                    <button (click)="pump.id && goToPumpDashboard(pump.id)"
+                        class="p-2 text-[var(--sp-primary)] hover:bg-[var(--sp-light-blue)] rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

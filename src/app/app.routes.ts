@@ -9,7 +9,11 @@ import { ReportsComponent } from './pages/reports/reports';
 import { AdminComponent } from './pages/admin/admin';
 import { StationManager } from './pages/admin/stations';
 import { UserManager } from './pages/admin/users';
+import { PumpsAdminComponent } from './pages/admin/pumps';
 import { ShiftManager } from './pages/admin/shifts';
+import { Financials } from './pages/admin/financials';
+import { CompaniesOverview } from './pages/admin-portal/companies-overview';
+import { CompanyPortalComponent } from './pages/company-portal/company-portal.component';
 
 
 
@@ -18,7 +22,7 @@ import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'company-portal', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'fuel-entry', component: FuelEntryc, canActivate: [authGuard] },
@@ -40,8 +44,30 @@ export const routes: Routes = [
       { path: '', redirectTo: 'stations', pathMatch: 'full' },
       { path: 'stations', component: StationManager },
       { path: 'users', component: UserManager },
-      { path: 'shifts', component: ShiftManager }
+      { path: 'pumps', component: PumpsAdminComponent },
+      { path: 'shifts', component: ShiftManager },
+      { path: 'financials', component: Financials }
     ]
+  },
+  {
+    path: 'admin-portal',
+    component: CompaniesOverview,
+    canActivate: [authGuard, roleGuard(['super-admin'])]
+  },
+  {
+    path: 'company-portal',
+    component: CompanyPortalComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'company/:companyId',
+    component: CompanyPortalComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'pump/:pumpId',
+    component: Dashboard,
+    canActivate: [authGuard]
   }
 ];
 

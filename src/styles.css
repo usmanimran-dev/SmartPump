@@ -1,51 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Layer for Fintech Precision & Dashboard */
+:root {
+  /* Smart Pump Pro - Professional Light Palette */
+  --sp-primary: #1e4ed8;
+  /* Primary Blue */
+  --sp-primary-hover: #163ab3;
+  --sp-light-blue: #e6f0ff;
+  /* Card subtle backgrounds */
+  --sp-success: #28a745;
+  --sp-error: #dc3545;
+  --sp-accent: #ffc107;
+  --sp-bg: #f8f9fa;
+  /* Main background */
+  --sp-card-bg: #ffffff;
+  --sp-text-main: #343a40;
+  /* Dark Gray */
+  --sp-text-muted: #6c757d;
+  --sp-border: #ced4da;
+  --sp-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
 @layer base {
   body {
-    @apply bg-slate-900 text-slate-50 antialiased;
+    @apply bg-[var(--sp-bg)] text-[var(--sp-text-main)] font-sans antialiased;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight text-[var(--sp-text-main)];
+    line-height: 1.3;
   }
 }
 
 @layer components {
-
-  /* Dashboard Card */
   .dashboard-card {
-    @apply bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 shadow-lg hover:border-slate-600 transition-all duration-300;
+    @apply bg-white rounded-lg border border-[var(--sp-border)] p-4 shadow-[var(--sp-shadow)] transition-all;
   }
 
-  /* Form Input */
-  .input-field {
-    @apply w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all;
-  }
-
-  /* Primary Button */
   .btn-primary {
-    @apply bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg shadow-indigo-500/20 transition-all active:scale-95;
+    @apply bg-[var(--sp-primary)] text-white font-medium px-4 py-2 rounded-md hover:bg-[var(--sp-primary-hover)] transition-all flex items-center gap-2;
   }
 
-  /* Status Badges */
+  .btn-secondary {
+    @apply bg-[var(--sp-light-blue)] text-[var(--sp-primary)] font-medium px-4 py-2 rounded-md border border-[var(--sp-primary)] hover:bg-[#cce0ff] transition-all flex items-center gap-2;
+  }
+
+  .btn-danger {
+    @apply bg-[var(--sp-error)] text-white font-medium px-4 py-2 rounded-md hover:bg-[#c82333] transition-all flex items-center gap-2;
+  }
+
+  .input-field {
+    @apply bg-white border border-[var(--sp-border)] rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--sp-primary)] focus:border-[var(--sp-primary)] transition-all;
+  }
+
+  .table-header {
+    @apply bg-[var(--sp-light-blue)] text-[var(--sp-text-main)] font-bold uppercase text-[12px] tracking-wider;
+  }
+
+  .trend-up {
+    @apply text-[var(--sp-success)] font-medium flex items-center gap-1;
+  }
+
+  .trend-down {
+    @apply text-[var(--sp-error)] font-medium flex items-center gap-1;
+  }
+
   .badge {
-    @apply px-3 py-1 rounded-full text-xs font-medium tracking-wide uppercase;
-  }
-
-  .badge-success {
-    @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20;
-  }
-
-  .badge-warning {
-    @apply bg-amber-500/10 text-amber-400 border border-amber-500/20;
-  }
-
-  .badge-danger {
-    @apply bg-rose-500/10 text-rose-400 border border-rose-500/20;
+    @apply px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider border;
   }
 }
 
-/* Utilities for Fintech */
-.font-mono-numbers {
-  font-feature-settings: "tnum";
-  font-variant-numeric: tabular-nums;
+.page-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[var(--sp-border)] rounded-full;
 }

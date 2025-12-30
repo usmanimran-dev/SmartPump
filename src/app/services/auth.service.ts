@@ -89,7 +89,7 @@ export class AuthService {
         this.isLoading.set(true);
         try {
             await signInWithEmailAndPassword(this.auth, email, pass);
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/company-portal']);
         } catch (error) {
             console.error('Login failed', error);
             throw error;
@@ -103,7 +103,7 @@ export class AuthService {
         try {
             const provider = new GoogleAuthProvider();
             await signInWithPopup(this.auth, provider);
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/company-portal']);
         } catch (error) {
             console.error('Google Login failed', error);
             throw error;
