@@ -1,5 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Auth, user, signInWithEmailAndPassword, signOut, User, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
+import { initializeApp as initializeTempApp, deleteApp as deleteTempApp } from 'firebase/app';
+import { getAuth as getTempAuth, createUserWithEmailAndPassword as createTempUser } from 'firebase/auth';
 import { Firestore, doc, getDoc, setDoc, serverTimestamp } from '@angular/fire/firestore';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -120,5 +122,45 @@ export class AuthService {
 
     isAuthenticated(): boolean {
         return !!this.userSignal();
+    }
+
+    async createStaff(data: Partial<UserRecord>, password: string) {
+        this.isLoading.set(true);
+        // Secondary app approach to avoid signing out the current admin
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYvG-Qyk3hVwxZh9DNr8ISn4f3jxRjEbw",
+            authDomain: "smart-pump-e3854.firebaseapp.com",
+            projectId: "smart-pump-e3854",
+            storageBucket: "smart-pump-e3854.firebasestorage.app",
+            messagingSenderId: "773485865936",
+            appId: "1:773485865936:web:e2f1b816c56a2b8aed27d5"
+        };
+
+        const tempAppName = 'temp-create-user-' + Math.random().toString(36).substring(7);
+        const tempApp = initializeTempApp(firebaseConfig, tempAppName);
+        const tempAuth = getTempAuth(tempApp);
+
+        try {
+            const userCred = await createTempUser(tempAuth, data.email!, password);
+            const uid = userCred.user.uid;
+
+            // Create Profile in Firestore using the primary Firestore instance
+            const userDocRef = doc(this.firestore, `users/${uid}`);
+            await setDoc(userDocRef, {
+                ...data,
+                uid: uid,
+                createdAt: serverTimestamp(),
+                isActive: true
+            });
+
+            await deleteTempApp(tempApp);
+            return uid;
+        } catch (error) {
+            console.error('Create staff failed', error);
+            await deleteTempApp(tempApp);
+            throw error;
+        } finally {
+            this.isLoading.set(false);
+        }
     }
 }

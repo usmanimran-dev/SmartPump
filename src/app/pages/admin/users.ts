@@ -1,5 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FuelEntryService, UserRecord, UserRole, Station } from '../../services/fuel.service';
 import { AuthService } from '../../services/auth.service';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
@@ -11,11 +12,56 @@ import { of, Observable } from 'rxjs';
   standalone: true,
   template: `
     <div class="space-y-6 page-fade-in pt-4">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-6">
         <div>
           <h2 class="text-2xl font-bold text-[var(--sp-text-main)]">Staff Management</h2>
           <p class="text-[var(--sp-text-muted)] text-sm font-medium">Assign roles and stations to your team</p>
         </div>
+        <button (click)="showForm.set(!showForm())" class="btn-primary">
+          {{ showForm() ? 'Cancel' : 'Add New Staff' }}
+        </button>
+      </div>
+
+      <!-- Add Staff Form -->
+      <div *ngIf="showForm()" class="dashboard-card max-w-2xl mx-auto shadow-lg mb-8 border border-[var(--sp-primary)]/10">
+        <h3 class="text-lg font-bold text-[var(--sp-text-main)] mb-6">Register New Team Member</h3>
+        <form [formGroup]="staffForm" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Full Name</label>
+              <input type="text" formControlName="name" class="input-field w-full" placeholder="e.g. Ahmad Ali" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Email Address</label>
+              <input type="email" formControlName="email" class="input-field w-full" placeholder="staff@smartpump.com" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Password</label>
+              <input type="password" formControlName="password" class="input-field w-full" placeholder="••••••••" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Role</label>
+              <select formControlName="role" class="input-field w-full">
+                <option *ngFor="let r of roles" [value]="r">{{ r | titlecase }}</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-[11px] font-bold text-[var(--sp-text-muted)] uppercase tracking-wider mb-2">Primary Station Assignment</label>
+              <select formControlName="stationId" class="input-field w-full">
+                <option value="">Unassigned</option>
+                <option *ngFor="let s of stations()" [value]="s.id">{{ s.name }} ({{ s.city }})</option>
+              </select>
+            </div>
+          </div>
+          <div class="pt-4 flex justify-end items-center gap-4">
+            <span *ngIf="staffForm.invalid && staffForm.touched" class="text-xs text-[var(--sp-error)] font-medium">
+              Check required fields above.
+            </span>
+            <button type="button" (click)="createStaff()" [disabled]="authService.isLoading()" class="btn-primary min-w-[140px]">
+              {{ authService.isLoading() ? 'Creating User...' : 'Register Staff' }}
+            </button>
+          </div>
+        </form>
       </div>
 
       <div class="dashboard-card !p-0 overflow-hidden shadow-sm">
@@ -70,14 +116,24 @@ import { of, Observable } from 'rxjs';
       </div>
     </div>
   `,
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class UserManager {
   private fuelService = inject(FuelEntryService);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService); // Public for template
+  private fb = inject(FormBuilder);
 
   roles: UserRole[] = ['staff', 'manager', 'owner'];
   userProfile = this.authService.userProfile;
+  showForm = signal(false);
+
+  staffForm = this.fb.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    role: ['staff' as UserRole, Validators.required],
+    stationId: ['']
+  });
 
   users = toSignal(
     toObservable(computed(() => this.userProfile())).pipe(
@@ -102,6 +158,42 @@ export class UserManager {
     ),
     { initialValue: [] as Station[] }
   );
+
+  async createStaff() {
+    this.staffForm.markAllAsTouched();
+    console.log('Attempting to create staff...', this.staffForm.value);
+
+    if (this.staffForm.invalid) {
+      console.warn('Form is invalid');
+      alert('Please fill in all fields correctly (Password min 6 chars).');
+      return;
+    }
+
+    const profile = this.userProfile();
+    console.log('Current Profile:', profile);
+    if (!profile?.orgId) {
+      alert('Error: Your session/organization profile is not loaded.');
+      return;
+    }
+
+    const val = this.staffForm.value;
+    try {
+      await this.authService.createStaff({
+        name: val.name!,
+        email: val.email!,
+        role: val.role as UserRole,
+        stationId: val.stationId!,
+        orgId: profile.orgId,
+        isActive: true
+      }, val.password!);
+
+      alert('Staff member registered successfully! 🚀');
+      this.staffForm.reset({ role: 'staff', stationId: '' });
+      this.showForm.set(false);
+    } catch (err: any) {
+      alert('Registration failed: ' + (err.message || 'Unknown error'));
+    }
+  }
 
   async updateStation(uid: string, stationId: string) {
     await this.fuelService.updateUser(uid, { stationId });

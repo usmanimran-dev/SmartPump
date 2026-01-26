@@ -18,12 +18,12 @@ import { CompanyPortalComponent } from './pages/company-portal/company-portal.co
 
 
 import { authGuard } from './guards/auth.guard';
-
 import { roleGuard } from './guards/role.guard';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
+  { path: 'login', component: Login, canActivate: [guestGuard] },
   { path: '', redirectTo: 'company-portal', pathMatch: 'full' },
-  { path: 'login', component: Login },
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'fuel-entry', component: FuelEntryc, canActivate: [authGuard] },
   {
@@ -68,7 +68,8 @@ export const routes: Routes = [
     path: 'pump/:pumpId',
     component: Dashboard,
     canActivate: [authGuard]
-  }
+  },
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

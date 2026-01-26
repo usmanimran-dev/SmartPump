@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-station-manager',
@@ -61,7 +62,8 @@ import { of, Observable } from 'rxjs';
                     [ngClass]="station.isActive ? 'text-[var(--sp-error)]' : 'text-[var(--sp-success)]'">
               {{ station.isActive ? 'Deactivate' : 'Activate' }}
             </button>
-            <button class="flex-1 text-[11px] font-bold text-[var(--sp-primary)] hover:underline uppercase tracking-wider">
+            <button (click)="manageStaff()" 
+                    class="flex-1 text-[11px] font-bold text-[var(--sp-primary)] hover:underline uppercase tracking-wider">
               Manage Staff
             </button>
             <button (click)="deleteStation(station)" 
@@ -86,6 +88,7 @@ export class StationManager {
   private fb = inject(FormBuilder);
   private fuelService = inject(FuelEntryService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   showForm = signal(false);
   userProfile = this.authService.userProfile;
@@ -106,6 +109,10 @@ export class StationManager {
     name: ['', [Validators.required, Validators.minLength(3)]],
     city: ['', Validators.required]
   });
+
+  manageStaff() {
+    this.router.navigate(['/admin/users']);
+  }
 
   async toggleStationStatus(station: Station) {
     if (!station.id) return;
