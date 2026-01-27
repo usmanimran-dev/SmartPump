@@ -30,7 +30,7 @@ export class AuthService {
     isLoading = signal(false);
     isInitialized = signal(false);
 
-    private profileSub?: any;
+    private profileSub?: () => void;
 
     constructor() {
         // Reactively fetch profile when user changes
@@ -91,6 +91,7 @@ export class AuthService {
         this.isLoading.set(true);
         try {
             await signInWithEmailAndPassword(this.auth, email, pass);
+            console.log('Login successful');
             this.router.navigate(['/company-portal']);
         } catch (error) {
             console.error('Login failed', error);
@@ -105,6 +106,7 @@ export class AuthService {
         try {
             const provider = new GoogleAuthProvider();
             await signInWithPopup(this.auth, provider);
+            console.log('Google Login successful');
             this.router.navigate(['/company-portal']);
         } catch (error) {
             console.error('Google Login failed', error);
