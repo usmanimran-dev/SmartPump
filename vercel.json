@@ -1,5 +1,19 @@
 {
     "version": 2,
     "framework": "angular",
-    "name": "smart-pump"
+    "name": "smart-pump",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist/SmartPump",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "installCommand": "npm install",
+    "build": {
+        "env": {
+            "NG_BUILD_COMMAND": "npm run build"
+        }
+    }
 }

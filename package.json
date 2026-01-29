@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:SmartPump": "node dist/SmartPump/server/server.mjs"
+    "serve:ssr:SmartPump": "node dist/SmartPump/server/server.mjs",
+    "postinstall": "npm run build"
   },
   "prettier": {
     "printWidth": 100,
