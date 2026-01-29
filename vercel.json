@@ -3,7 +3,7 @@
     "framework": "angular",
     "name": "smart-pump",
     "buildCommand": "npm run build",
-    "outputDirectory": "dist/SmartPump",
+    "outputDirectory": "dist/SmartPump/browser",
     "rewrites": [
         {
             "source": "/(.*)",
